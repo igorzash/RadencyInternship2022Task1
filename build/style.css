@@ -2,6 +2,7 @@
 
 * {
     box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
 }
 
 html, body {
@@ -10,13 +11,17 @@ html, body {
 }
 
 body {
-    font-family: 'Nunito', sans-serif;
+    background: #121212;
 }
 
 #root {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+}
+
+.hidden {
+    display: none !important;
 }
 
 .notes-container {
@@ -28,14 +33,28 @@ body {
 .notes-container div {
     width: 100%;
     display: flex;
-    padding: 0 10px;
-    margin: 10px 0;
+    padding: 0 5px;
+    margin: 5px 0;
     background-color: #333;
     color: #eee;
     font-size: 16px;
+    border-radius: 5px;
 }
 
 .notes-container div div:first-child {
     font-weight: bold;
 }
 
+#general-actions {
+    padding-top: 25px;
+    padding-bottom: 10px;
+}
+
+select {
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 16px;
+    color: #eee;
+    background-color: #333;
+}
