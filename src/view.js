@@ -41,18 +41,6 @@ export function renderNote(note, options) {
 	});
 
 	const actions = [
-		options.editState === false
-			? {
-					name: "toggleArchive",
-					handler: ({ target }) => {
-						debugger;
-						note.toggleArchive();
-						target.parentElement.parentElement.remove();
-						delete options.target;
-						renderNote(note, options);
-					},
-			  }
-			: undefined,
 		{
 			name: "editToggle",
 			handler: ({ target }) => {
@@ -76,6 +64,26 @@ export function renderNote(note, options) {
 				});
 			},
 		},
+		options.editState === false
+			? {
+					name: "toggleArchive",
+					handler: ({ target }) => {
+						note.toggleArchive();
+						target.parentElement.parentElement.remove();
+						delete options.target;
+						renderNote(note, options);
+					},
+			  }
+			: {
+					name: "dismiss",
+					handler: ({ target }) => {
+						renderNote(note, {
+							options,
+							editState: false,
+							target: target.parentElement.parentElement,
+						});
+					},
+			  },
 	].filter((x) => x !== undefined);
 
 	const actions_root = document.createElement("div");
