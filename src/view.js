@@ -23,6 +23,7 @@ export function renderNote(note, options) {
 		} else if (i === 0) {
 			column = document.createElement("input");
 			column.classList.add("note-contents__input");
+			column.placeholder = "Type your note contents here."
 			column.value = x;
 		} else if (i === 2) {
 			column = document.createElement("select");
@@ -42,17 +43,15 @@ export function renderNote(note, options) {
 
 	const actions = [
 		{
-			name: "editToggle",
+			name: options.editState === true ? "save" : "edit",
 			handler: ({ target }) => {
 				if (options.editState) {
-					const contents =
-						target.parentElement.parentElement.querySelector(
-							".note-contents__input"
-						).value;
-					const category =
-						target.parentElement.parentElement.querySelector(
-							".note-category__select"
-						).value;
+					const contents = target.querySelector(
+						".note-contents__input"
+					).value;
+					const category = target.querySelector(
+						".note-category__select"
+					).value;
 
 					note.update(contents, category);
 				}
@@ -60,37 +59,63 @@ export function renderNote(note, options) {
 				renderNote(note, {
 					...options,
 					editState: !options.editState,
-					target: target.parentElement.parentElement,
+					target,
 				});
 			},
 		},
-		options.editState === false
-			? {
-					name: "toggleArchive",
-					handler: ({ target }) => {
-						note.toggleArchive();
-						target.parentElement.parentElement.remove();
-						delete options.target;
-						renderNote(note, options);
+		...(options.editState === false
+			? [
+					{
+						name: "archive",
+						handler: ({ target }) => {
+							note.toggleArchive();
+							target.remove();
+							delete options.target;
+							renderNote(note, options);
+						},
 					},
-			  }
-			: {
-					name: "dismiss",
-					handler: ({ target }) => {
-						renderNote(note, {
-							options,
-							editState: false,
-							target: target.parentElement.parentElement,
-						});
+					{
+						name: "delete",
+						handler: ({ target }) => {
+							storage.remove(note);
+							target.remove();
+						},
 					},
-			  },
-	].filter((x) => x !== undefined);
+			  ]
+			: [
+					{
+						name: "cancel",
+						handler: ({ target }) => {
+							renderNote(note, {
+								options,
+								editState: false,
+								target,
+							});
+						},
+					},
+			  ]),
+	]
+		.filter((x) => x !== undefined)
+		.map((x) => ({
+			...x,
+			handler: (evt) => {
+				return x.handler({
+					...evt,
+					target: evt.target.parentElement.parentElement,
+				});
+			},
+		}));
 
 	const actions_root = document.createElement("div");
 
 	for (const action of actions) {
 		const btn = document.createElement("button");
-		btn.textContent = action.name;
+
+		const icon = document.createElement("i");
+		icon.classList.add("material-icons");
+		icon.textContent = action.name;
+		btn.appendChild(icon);
+
 		btn.addEventListener("click", action.handler);
 
 		actions_root.appendChild(btn);

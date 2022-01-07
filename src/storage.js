@@ -3,11 +3,15 @@ import Note from "./note";
 
 class Storage {
 	data = {
-		notes: [],
+		notes: new Set(),
 	};
 
 	addNote(note) {
-		this.data.notes.push(note);
+		this.data.notes.add(note);
+	}
+
+	remove(note) {
+		this.data.notes.delete(note);
 	}
 }
 
