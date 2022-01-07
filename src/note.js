@@ -1,8 +1,7 @@
 export default class Note {
 	archived = false;
 
-	constructor(id, contents, category, date) {
-		this.id = id;
+	constructor(contents, category, date) {
 		this.contents = contents;
 		this.category = category;
 		this.date = date;

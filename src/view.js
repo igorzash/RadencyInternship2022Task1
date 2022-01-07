@@ -6,7 +6,7 @@ const archivedNotesRoot = document.getElementById("archieved-notes__root");
 
 const notesTypeSelect = document.getElementById("notes-type__select");
 
-function renderNote(note, options) {
+export function renderNote(note, options) {
 	const note_container = document.createElement("div");
 	note_container.classList.add("note-container");
 
