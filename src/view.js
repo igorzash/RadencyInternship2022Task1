@@ -1,37 +1,82 @@
 import storage from "./storage";
+import CATEGORY from "./category";
 
 const notesRoot = document.getElementById("notes__root");
-const archievedNotesRoot = document.getElementById("archieved-notes__root");
+const archivedNotesRoot = document.getElementById("archieved-notes__root");
 
 const notesTypeSelect = document.getElementById("notes-type__select");
 
-function toggleArchive() {}
-
-function renderNote(note, archieved) {
+function renderNote(note, options) {
 	const note_container = document.createElement("div");
 	note_container.classList.add("note-container");
 
-	const contents = [
+	[
 		note.contents,
 		note.date.toLocaleDateString("en-US"),
 		note.category,
-	];
+	].forEach((x, i) => {
+		let column;
 
-	for (const column_contents of contents) {
-		const column = document.createElement("div");
-		column.textContent = column_contents;
+		if (i === 1 || options.editState === false) {
+			column = document.createElement("div");
+			column.textContent = x;
+		} else if (i === 0) {
+			column = document.createElement("input");
+			column.classList.add("note-contents__input");
+			column.value = x;
+		} else if (i === 2) {
+			column = document.createElement("select");
+			column.classList.add("note-category__select");
+
+			Object.values(CATEGORY).forEach((x) => {
+				const option = document.createElement("option");
+				option.innerText = x;
+				column.appendChild(option);
+			});
+
+			column.value = x;
+		}
+
 		note_container.appendChild(column);
-	}
+	});
 
 	const actions = [
+		options.editState === false
+			? {
+					name: "toggleArchive",
+					handler: ({ target }) => {
+						debugger;
+						note.toggleArchive();
+						target.parentElement.parentElement.remove();
+						delete options.target;
+						renderNote(note, options);
+					},
+			  }
+			: undefined,
 		{
-			name: "toggleArchive",
+			name: "editToggle",
 			handler: ({ target }) => {
-				target.parentElement.parentElement.remove();
-				renderNote(note, !archieved);
+				if (options.editState) {
+					const contents =
+						target.parentElement.parentElement.querySelector(
+							".note-contents__input"
+						).value;
+					const category =
+						target.parentElement.parentElement.querySelector(
+							".note-category__select"
+						).value;
+
+					note.update(contents, category);
+				}
+
+				renderNote(note, {
+					...options,
+					editState: !options.editState,
+					target: target.parentElement.parentElement,
+				});
 			},
 		},
-	];
+	].filter((x) => x !== undefined);
 
 	const actions_root = document.createElement("div");
 
@@ -45,24 +90,30 @@ function renderNote(note, archieved) {
 
 	note_container.appendChild(actions_root);
 
-	(archieved === true ? archievedNotesRoot : notesRoot).appendChild(
+	if (options.target !== undefined) {
+		options.target.replaceWith(note_container);
+		return;
+	}
+
+	(note.archived === true ? archivedNotesRoot : notesRoot).appendChild(
 		note_container
 	);
 }
 
 export function init() {
-	storage.data.notes.forEach((note) => renderNote(note, false));
-	storage.data.archievedNotes.forEach((note) => renderNote(note, true));
+	storage.data.notes.forEach((note) =>
+		renderNote(note, { editState: false })
+	);
 
-	notesTypeSelect.addEventListener('change', (event) => {
+	notesTypeSelect.addEventListener("change", (event) => {
 		const index = event.target.selectedIndex;
 
 		if (index === 0) {
-			notesRoot.classList.remove('hidden');
-			archievedNotesRoot.classList.add('hidden');
+			notesRoot.classList.remove("hidden");
+			archivedNotesRoot.classList.add("hidden");
 		} else if (index === 1) {
-			notesRoot.classList.add('hidden');
-			archievedNotesRoot.classList.remove('hidden');
+			notesRoot.classList.add("hidden");
+			archivedNotesRoot.classList.remove("hidden");
 		}
 	});
 }

@@ -28,11 +28,13 @@ body {
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .notes-container div {
     width: 100%;
     display: flex;
+    height: fit-content;
     padding: 0 5px;
     margin: 5px 0;
     background-color: #333;
@@ -41,8 +43,18 @@ body {
     border-radius: 5px;
 }
 
-.notes-container div div:first-child {
+.notes-container div * {
+    display: flex;
+    width: 20%;
+}
+
+.notes-container div div * {
+    max-width: 100%;
+}
+
+.notes-container div *:first-child {
     font-weight: bold;
+    width: 40%;
 }
 
 #general-actions {
@@ -54,7 +66,7 @@ body {
 select {
     border: none;
     border-radius: 5px;
-    padding: 5px 10px;
+    padding: 0;
     font-size: 16px;
     color: #eee;
     background-color: #333;
