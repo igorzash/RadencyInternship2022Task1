@@ -4,8 +4,6 @@ import CATEGORY from "./category";
 const notesRoot = document.getElementById("notes__root");
 const archivedNotesRoot = document.getElementById("archieved-notes__root");
 
-const notesTypeSelect = document.getElementById("notes-type__select");
-
 export function renderNote(note, options) {
 	const note_container = document.createElement("div");
 	note_container.classList.add("note-container");
@@ -137,16 +135,4 @@ export function init() {
 	storage.data.notes.forEach((note) =>
 		renderNote(note, { editState: false })
 	);
-
-	notesTypeSelect.addEventListener("change", (event) => {
-		const index = event.target.selectedIndex;
-
-		if (index === 0) {
-			notesRoot.classList.remove("hidden");
-			archivedNotesRoot.classList.add("hidden");
-		} else if (index === 1) {
-			notesRoot.classList.add("hidden");
-			archivedNotesRoot.classList.remove("hidden");
-		}
-	});
 }
