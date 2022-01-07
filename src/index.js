@@ -4,6 +4,7 @@ import Note from "./note";
 import storage from "./storage";
 import CATEGORY from "./category";
 import prepopulateStorage from "./randomData";
+import renderSummaryTable from "./view/renderSummaryTable";
 
 const notesRoot = document.getElementById("notes__root");
 const archivedNotesRoot = document.getElementById("archieved-notes__root");
@@ -16,6 +17,7 @@ newNoteButton.addEventListener("click", () => {
 	const note = new Note("", CATEGORY.TASK, new Date());
 	storage.addNote(note);
 	renderNote(note, { editState: true });
+	renderSummaryTable();
 });
 
 notesTypeSelect.addEventListener("change", (event) => {
