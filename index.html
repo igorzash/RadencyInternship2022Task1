@@ -6,11 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notes</title>
 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="build/style.css" >
 </head>
 <body>
     <script src="build/bundle.js" defer></script>
 
-    <div id="root"></div>
+    <div id="root">
+        <noscript>Enable JavaScript to use this page.</noscript>
+
+        <div id="general-actions">
+            <select id="notes-type__select" autocomplete="off">
+                <option>Active notes</option>
+                <option>Archieved notes</option>
+            </select>
+
+            <button id="new-note__btn">New note</button>
+        </div>
+        <div id="notes__root" class="notes-container">
+            <div>
+                <div>Contents</div>
+                <div>Created</div>
+                <div>Category</div>
+                <div>Actions</div>
+            </div>
+        </div>
+        <div id="archieved-notes__root" class="notes-container hidden">
+            <div>
+                <div>Contents</div>
+                <div>Created</div>
+                <div>Category</div>
+                <div>Actions</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
