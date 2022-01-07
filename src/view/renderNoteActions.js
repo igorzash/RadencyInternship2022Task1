@@ -1,45 +1,7 @@
-import storage from "./storage";
-import CATEGORY from "./category";
+import renderNote from "./renderNote";
+import storage from "../storage";
 
-const notesRoot = document.getElementById("notes__root");
-const archivedNotesRoot = document.getElementById("archieved-notes__root");
-
-export function renderNote(note, options) {
-	const note_container = document.createElement("div");
-	note_container.classList.add("note-container");
-
-	[
-		note.contents,
-		note.date.toLocaleDateString("en-US"),
-		note.category,
-		note.dates,
-	].forEach((x, i) => {
-		let column;
-
-		if (i === 1 || i > 2 || options.editState === false) {
-			column = document.createElement("div");
-			column.textContent = x;
-		} else if (i === 0) {
-			column = document.createElement("input");
-			column.classList.add("note-contents__input");
-			column.placeholder = "Type your note contents here.";
-			column.value = x;
-		} else if (i === 2) {
-			column = document.createElement("select");
-			column.classList.add("note-category__select");
-
-			Object.values(CATEGORY).forEach((x) => {
-				const option = document.createElement("option");
-				option.innerText = x;
-				column.appendChild(option);
-			});
-
-			column.value = x;
-		}
-
-		note_container.appendChild(column);
-	});
-
+function renderNoteActions(note, note_container, options) {
 	const actions = [
 		...(note.archived === false
 			? [
@@ -123,19 +85,6 @@ export function renderNote(note, options) {
 	}
 
 	note_container.appendChild(actions_root);
-
-	if (options.target !== undefined) {
-		options.target.replaceWith(note_container);
-		return;
-	}
-
-	(note.archived === true ? archivedNotesRoot : notesRoot).appendChild(
-		note_container
-	);
 }
 
-export function init() {
-	storage.data.notes.forEach((note) =>
-		renderNote(note, { editState: false })
-	);
-}
+export default renderNoteActions;
