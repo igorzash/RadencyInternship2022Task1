@@ -6,7 +6,6 @@ const archivedNotesRoot = document.getElementById("archieved-notes__root");
 
 function renderNote(note, options) {
 	const note_container = document.createElement("div");
-	note_container.classList.add("note-container");
 
 	renderNoteDetails(note, note_container, options);
 	renderNoteActions(note, note_container, options);

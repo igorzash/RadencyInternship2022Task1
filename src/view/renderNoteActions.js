@@ -1,5 +1,6 @@
 import renderNote from "./renderNote";
 import storage from "../storage";
+import renderSummaryTable from "./renderSummaryTable";
 
 function renderNoteActions(note, note_container, options) {
 	const actions = [
@@ -62,10 +63,12 @@ function renderNoteActions(note, note_container, options) {
 	].map((x) => ({
 		...x,
 		handler: (evt) => {
-			return x.handler({
+			x.handler({
 				...evt,
 				target: evt.target.parentElement.parentElement,
 			});
+
+			renderSummaryTable();
 		},
 	}));
 

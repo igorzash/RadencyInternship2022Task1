@@ -10,6 +10,10 @@ html, body {
     padding: 0;
 }
 
+body {
+    padding-bottom: 50px;
+}
+
 #root {
     width: 100%;
     max-width: 1200px;
@@ -20,19 +24,19 @@ html, body {
     display: none !important;
 }
 
-.notes-container {
+.table {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.notes-container > div:first-child {
+.table > div:first-child {
     background-color: #555;
     color: #eee;
 }
 
-.notes-container > div {
+.table > div {
     width: 100%;
     display: flex;
     height: fit-content;
@@ -44,17 +48,14 @@ html, body {
     border-radius: 5px;
 }
 
-.notes-container > div > * {
+.table > div > * {
     display: flex;
-    width: 20%;
+    flex: 1 0 0;
     padding: 0 10px;
 }
 
-.notes-container > div > div > * {
+.table > div > div > * {
     max-width: 100%;
-}
-
-.notes-container > div > *:first-child {
 }
 
 #general-actions {
