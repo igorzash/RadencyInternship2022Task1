@@ -12,16 +12,17 @@ export function renderNote(note, options) {
 		note.contents,
 		note.date.toLocaleDateString("en-US"),
 		note.category,
+		note.dates,
 	].forEach((x, i) => {
 		let column;
 
-		if (i === 1 || options.editState === false) {
+		if (i === 1 || i > 2 || options.editState === false) {
 			column = document.createElement("div");
 			column.textContent = x;
 		} else if (i === 0) {
 			column = document.createElement("input");
 			column.classList.add("note-contents__input");
-			column.placeholder = "Type your note contents here."
+			column.placeholder = "Type your note contents here.";
 			column.value = x;
 		} else if (i === 2) {
 			column = document.createElement("select");
@@ -40,27 +41,31 @@ export function renderNote(note, options) {
 	});
 
 	const actions = [
-		{
-			name: options.editState === true ? "save" : "edit",
-			handler: ({ target }) => {
-				if (options.editState) {
-					const contents = target.querySelector(
-						".note-contents__input"
-					).value;
-					const category = target.querySelector(
-						".note-category__select"
-					).value;
+		...(note.archived === false
+			? [
+					{
+						name: options.editState === true ? "save" : "edit",
+						handler: ({ target }) => {
+							if (options.editState) {
+								const contents = target.querySelector(
+									".note-contents__input"
+								).value;
+								const category = target.querySelector(
+									".note-category__select"
+								).value;
 
-					note.update(contents, category);
-				}
+								note.update(contents, category);
+							}
 
-				renderNote(note, {
-					...options,
-					editState: !options.editState,
-					target,
-				});
-			},
-		},
+							renderNote(note, {
+								...options,
+								editState: !options.editState,
+								target,
+							});
+						},
+					},
+			  ]
+			: []),
 		...(options.editState === false
 			? [
 					{
@@ -92,17 +97,15 @@ export function renderNote(note, options) {
 						},
 					},
 			  ]),
-	]
-		.filter((x) => x !== undefined)
-		.map((x) => ({
-			...x,
-			handler: (evt) => {
-				return x.handler({
-					...evt,
-					target: evt.target.parentElement.parentElement,
-				});
-			},
-		}));
+	].map((x) => ({
+		...x,
+		handler: (evt) => {
+			return x.handler({
+				...evt,
+				target: evt.target.parentElement.parentElement,
+			});
+		},
+	}));
 
 	const actions_root = document.createElement("div");
 

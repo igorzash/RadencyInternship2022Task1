@@ -55,7 +55,6 @@ html, body {
 }
 
 .notes-container > div > *:first-child {
-    width: 40%;
 }
 
 #general-actions {

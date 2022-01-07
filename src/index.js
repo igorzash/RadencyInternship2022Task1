@@ -6,7 +6,7 @@ import CATEGORY from "./category";
 const notesRoot = document.getElementById("notes__root");
 const archivedNotesRoot = document.getElementById("archieved-notes__root");
 const notesTypeSelect = document.getElementById("notes-type__select");
-const newNoteButton = document.getElementById('new-note__btn');
+const newNoteButton = document.getElementById("new-note__btn");
 
 newNoteButton.addEventListener("click", () => {
 	const note = new Note("", CATEGORY.TASK, new Date());
